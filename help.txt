@@ -1,0 +1,6 @@
+1.提交到远程仓库
+git remote add origin https://github.com/hyyrz888/backstage.git
+git push -u origin master
+
+2.验证是否和远程仓库链接成功
+ssh -T git@github.com  /  git@gitee.com(码云)
