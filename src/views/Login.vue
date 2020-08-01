@@ -21,8 +21,8 @@ export default {
 	data() {
 		return {
 			loginForm: {
-				username: '',
-				password: ''
+				username: 'admin',
+				password: '123456'
 			},
 			loginrules: {
 				username: [{ required: true, message: '用户名不为空', trigger: 'blur' }, { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }],
@@ -30,8 +30,8 @@ export default {
 			}
 		};
 	},
-	mounted() {
-
+	created() {
+		this.welcome();
 	},
 	methods: {
 		formSubmit() {
@@ -39,42 +39,47 @@ export default {
 			this.$refs['loginForm'].validate(async valid => {
 				if (!valid) return;
 				//数据验证
-				let { data: res } = await this.$axios({
+				let res = await this.$axios({
+					//等待先执行返回结果后再处理
 					method: 'post',
 					url: 'login',
 					data: this.loginForm //当前数据
 				});
-				console.log(res)
+				console.log(res);
 				if (res.meta.status !== 200) {
 					//登陆失败
 					this.$message({
 						type: 'warning',
-						message: "用户名或者密码错误!"
+						message: '用户名或者密码错误!'
 					});
 					return;
 				} else if (res.meta.status === 200) {
 					//登陆成功
 					//添加localStorage
-					localStorage.setItem('token',res.data.token);
+					sessionStorage.setItem('token', res.data.token);
 					this.$message({
 						type: 'success',
 						message: res.meta.msg,
 						duration: 1000,
 						onClose() {
-							return false;
-							that.$router.push('about');
+							that.$router.push('welcome');
 						}
 					});
-				}else{
+				} else {
 					this.$message({
 						type: 'success',
-						message: res.meta.msg,
+						message: res.meta.msg
 					});
 				}
 			});
 		},
 		formReset() {
 			this.$refs['loginForm'].resetFields();
+		},
+		welcome() {
+			console.log(
+				'商城后台管理系统，使用vue全家桶+elementUI+axios搭建的SPA，数据库和后台部署在本服务器。完成了用户管理，权限管理，商品管理，订单管理和数据统计的功能，包含各部分前端向数据库的增删改查的请求。'
+			);
 		}
 	}
 };
@@ -84,7 +89,7 @@ export default {
 #app {
 	.loginContainer {
 		height: 100vh;
-		background: #044;
+		background: #2b4b6b;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -95,14 +100,18 @@ export default {
 			padding: 30px;
 			box-sizing: border-box;
 			p {
-				margin-top: 10px;
+				margin-top: 22px;
 				margin-bottom: 22px;
 			}
 			.logo {
 				position: absolute;
-				width: 66px;
-				height: 66px;
+				height: 88px;
+				width: 88px;
+				border: 1px solid #eee;
 				border-radius: 50%;
+				padding: 10px;
+				-webkit-box-shadow: 0 0 10px #ddd;
+				box-shadow: 0 0 10px #ddd;
 				background: #f5f5f5;
 				top: 0;
 				left: 50%;
