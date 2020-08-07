@@ -42,7 +42,7 @@ export default {
 			if (res.meta.status !== 200) {
 				return this.$message.error('获取权限列表失败！');
 			}
-			this.$message.success(res.meta.msg);
+			this.$message.success('获取权限列表成功！');
 			this.rightsList = res.data;
 		}
 	}
