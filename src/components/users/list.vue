@@ -65,7 +65,7 @@
 		<el-dialog @close="dialogClose('edit')" title="修改用户" :visible.sync="editdialogVisable" width="50%">
 			<el-form :model="editForm" status-icon :rules="addruleFormRules" ref="editruleFormRef" label-width="70px">
 				<el-form-item label="用户名" prop="username"><el-input v-model="editForm.username" disabled></el-input></el-form-item>
-				<el-form-item label="邮箱" prop="email"><el-input  v-model="editForm.email"></el-input></el-form-item>
+				<el-form-item label="邮箱" prop="email"><el-input v-model="editForm.email"></el-input></el-form-item>
 				<el-form-item label="手机" prop="mobile"><el-input v-model="editForm.mobile"></el-input></el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
@@ -77,9 +77,9 @@
 		<!--分配角色-->
 		<el-dialog @close="setRoleClose" title="分配角色" :visible.sync="roledialogVisable" width="30%">
 			<el-form ref="roleFormRef" status-icon>
-				<el-form-item  prop="username"><el-input  v-model="userInfo.username" disabled></el-input></el-form-item>
+				<el-form-item prop="username"><el-input v-model="userInfo.username" disabled></el-input></el-form-item>
 				<el-form-item prop="roleName"><el-input v-model="userInfo.role_name" disabled></el-input></el-form-item>
-				<el-select  v-model="selectRoleId" placeholder="请选择角色">
+				<el-select v-model="selectRoleId" placeholder="请选择角色">
 					<el-option v-for="item in roleList" :key="item.id" :label="item.roleName" :value="item.id"></el-option>
 				</el-select>
 			</el-form>
@@ -171,10 +171,10 @@ export default {
 					{ validator: checkMobile, trigger: 'blur' }
 				]
 			},
-			roledialogVisable:false,
-			userInfo:{},  //用户信息
-			roleList:{},  //权限列表
-			selectRoleId:''  //当前选择角色的id
+			roledialogVisable: false,
+			userInfo: {}, //用户信息
+			roleList: {}, //权限列表
+			selectRoleId: '' //当前选择角色的id
 		};
 	},
 	created() {
@@ -317,33 +317,35 @@ export default {
 		allotClick(userinfo) {
 			//获取当前用户信息
 			this.userInfo = userinfo;
-			console.log(this.userInfo)
+			console.log(this.userInfo);
 			this.roledialogVisable = true;
 			//显示角色列表
-			this.$axios.get('roles').then(res=>{
-				if(res.meta.status!==200)return;
+			this.$axios.get('roles').then(res => {
+				if (res.meta.status !== 200) return;
 				this.roleList = res.data;
-			})
+			});
 		},
 		roleClick() {
 			//判断是否有id,select的option项
 			console.log(this.selectRoleId);
-			if(!this.selectRoleId) return this.$message.error("请要分配的角色");
+			if (!this.selectRoleId) return this.$message.error('请要分配的角色');
 			//修改角色
-			this.$axios.put(`users/${this.userInfo.id}/role`,{
-				rid:this.selectRoleId
-			}).then(res=>{
-				console.log(res);
-				if(res.meta.status!==200)return this.$message.error(res.meta.msg);
-				this.$message.success(res.meta.msg);
-				this.roledialogVisable = false;
-				this.getUserlist();
-			})
+			this.$axios
+				.put(`users/${this.userInfo.id}/role`, {
+					rid: this.selectRoleId
+				})
+				.then(res => {
+					console.log(res);
+					if (res.meta.status !== 200) return this.$message.error(res.meta.msg);
+					this.$message.success(res.meta.msg);
+					this.roledialogVisable = false;
+					this.getUserlist();
+				});
 		},
-		setRoleClose(){
+		setRoleClose() {
 			//清空数据
-		      this.selectRoleId=''
-		      this.userInfo={}
+			this.selectRoleId = '';
+			this.userInfo = {};
 		}
 	}
 };

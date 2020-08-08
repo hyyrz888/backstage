@@ -5,6 +5,8 @@ import store from './store'
 import './plugin/element.js'
 
 import axios from 'axios'
+import ZkTable from 'mds-table-with-tree-grid'
+
 //配置请求根路径
 axios.defaults.baseURL = "http://118.24.219.139:8888/api/private/v1"
 axios.interceptors.request.use(config => {
@@ -23,6 +25,7 @@ axios.interceptors.response.use(res => {
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 
+Vue.component(ZkTable.name,ZkTable)
 new Vue({
 	router,
 	store,
